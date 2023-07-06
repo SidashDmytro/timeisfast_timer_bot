@@ -1,0 +1,14 @@
+{
+  "name": "timeisfast-timer-bot",
+  "version": "1.0.1",
+  "description": "Telegram bot that shows the progress of the year",
+  "main": "timeisfastBot.js",
+  "scripts": {
+    "start": "node timeisfastBot.js"
+  },
+  "dependencies": {
+    "cron": "^2.3.1",
+    "dotenv": "^10.0.0",
+    "node-telegram-bot-api": "^0.54.0"
+  }
+}
