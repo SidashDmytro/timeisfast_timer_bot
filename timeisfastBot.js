@@ -109,4 +109,4 @@ let job = new CronJob(
     false
 );
 
-// job.start();
+job.start();
