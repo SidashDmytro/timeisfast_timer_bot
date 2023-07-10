@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { getPercentage, drawTheScale, getDate, createUserMongoDB, updateIntervalMongoDB, getAllUsersMongoDB, whatDayToday, deleteUserMongoDB } = require('./functions')
+const { createUserMongoDB, updateIntervalMongoDB, getAllUsersMongoDB, whatDayToday, deleteUserMongoDB, getProgressMsg } = require('./functions')
 const TelegramBot = require('node-telegram-bot-api');
 const token = process.env.TELEGRAM_BOT_TOKEN;
 const COMMANDS = require('./commands');
@@ -10,11 +10,6 @@ const bot = new TelegramBot(token, { polling: true });
 // Commands for bot
 bot.setMyCommands(COMMANDS)
     .catch(error => console.error(error));
-
-let currentDay = getDate()[0];
-let currentYear = getDate()[1];
-let percentage = getPercentage(currentDay, currentYear)
-const progressMsg = `Вже пройшло ${percentage}% у ${currentYear} році\n${drawTheScale(percentage)}`;
 
 bot.on('polling_error', (error) => {
     console.error('[polling_error]', error);
@@ -42,6 +37,7 @@ const keyboard = {
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     const message = msg.text.toString();
+    const progressMsg = getProgressMsg();
 
     switch (message) {
         case '/start':
@@ -82,6 +78,8 @@ let job = new CronJob(
         let today = whatDayToday();
         let usersList = [];
         let textOfMessage = '';
+        const progressMsg = getProgressMsg();
+
         if (today.month == 1 && today.day == 1) { //January, 1 - send a message to all users and wish them a Happy New Year
             usersList = await getAllUsersMongoDB('weekly', 'daily', 'monthly');
             textOfMessage = `Вітаємо вас із Новим Роком!!! 🥳🎉🎊`

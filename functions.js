@@ -54,13 +54,6 @@ function getPercentage(day, year) {
     return +result.toFixed(2);
 }
 
-function getDate() {
-    let today = new Date();
-    let year = today.getFullYear();
-    let day = Math.ceil((Date.now() - new Date(year, 0, 1)) / 24 / 60 / 60 / 1000);
-    return [day, year];
-}
-
 function drawTheScale(percentage) {
     const countOfSquares = 20; // how many squares in the scale
     const filledSquares = Math.floor(percentage / (100 / countOfSquares));
@@ -71,4 +64,12 @@ function drawTheScale(percentage) {
     return scale;
 }
 
-module.exports = { getPercentage, drawTheScale, getDate, createUserMongoDB, updateIntervalMongoDB, getAllUsersMongoDB, whatDayToday, deleteUserMongoDB };
+function getProgressMsg() {
+    let today = new Date();
+    let currentYear = today.getFullYear();
+    let currentDay = Math.ceil((Date.now() - new Date(currentYear, 0, 1)) / 24 / 60 / 60 / 1000);
+    let percentage = getPercentage(currentDay, currentYear)
+    return `Вже пройшло ${percentage}% у ${currentYear} році\n${drawTheScale(percentage)}`;
+}
+
+module.exports = { createUserMongoDB, updateIntervalMongoDB, getAllUsersMongoDB, whatDayToday, deleteUserMongoDB, getProgressMsg };
